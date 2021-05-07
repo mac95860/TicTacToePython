@@ -16,6 +16,8 @@ current_player = "X"
 
 def play_game():
   # display initial game board
+  # global game_is_still_going
+  # game_is_still_going = True
   display_board()
 
   while game_is_still_going:
@@ -23,16 +25,45 @@ def play_game():
     check_if_game_over()
     flip_player()
   # The game has ended
-  if winner == "X" or winner == "0":
+  if winner == "X" or winner == "O":
     print(winner + " won.")
   elif winner == "None":
     print("tie")
 
+def play_again():
+  global winner
+  if winner:
+    check_answer = input("Would you like to play again? ")
+    if check_answer == "yes" or check_answer == "Yes" or check_answer == "y":
+      reset_board()
+      play_game()
+    else:
+      print("Until Next Time Then!")
+
+def reset_board():
+  global board
+  global winner
+  winner = None
+  board = ['-','-','-','-','-','-','-','-','-']
+
 # handle turn of arbitary player
 def handle_turn(player):
+  print(player + "'s turn.'")
   position = input("Choose a position from 1-9: ")
-  position = int(position) - 1
-  board[position] = "X"
+
+  valid = False
+  while not valid:
+    while position not in ["1", "2", "3", "4", "5", "6", "7", "8", "9"]:
+      position = input("Invalid position. Choose a position from 1-9: ")
+    
+    position = int(position) - 1
+
+    if board[position] == "-":
+      valid = True
+    else:
+      print("You can't go there. Go Again.")
+  
+  board[position] = player
   display_board()
 
 def check_if_game_over():
@@ -49,13 +80,13 @@ def check_if_win():
   diagonal_winner = check_diagonals()
   if row_winner:
     #there was a winne
-    winner = row_winner()
+    winner = row_winner
   elif diagonal_winner:
     #there was a winner
-    winner = diagonal_winner()
+    winner = diagonal_winner
   elif column_winner:
     #there was a winner
-    winner = column_winner()
+    winner = column_winner
   else:
     #there was no winners
     winner = "None"
@@ -81,7 +112,7 @@ def check_columns():
   global game_is_still_going
   column_1 = board[0] == board[3] == board[6] != "-"
   column_2 = board[1] == board[4] == board[7] != "-"
-  column_3 = board[2] == board[5] == board[9] != "-"
+  column_3 = board[2] == board[5] == board[8] != "-"
   if column_1 or column_2 or column_3:
     game_is_still_going = False
   
@@ -95,8 +126,8 @@ def check_columns():
 
 def check_diagonals():
   global game_is_still_going
-  diagonal_1 = board[0] == board[4] == board[9] != "-"
-  diagonal_2 = board[2] == board[4] == board[6] != "-"
+  diagonal_1 = board[0] == board[4] == board[8] != "-"
+  diagonal_2 = board[6] == board[4] == board[2] != "-"
 
   if diagonal_1 or diagonal_2:
     game_is_still_going = False
@@ -105,13 +136,22 @@ def check_diagonals():
   if diagonal_1:
     return board[0]
   elif diagonal_2:
-    return board[1]
-  
+    return board[6]
 
 def check_if_tie():
+  global game_is_still_going
+  if "-" not in board:
+    game_is_still_going = False
   return
 
 def flip_player():
+  global current_player
+  if current_player == "X":
+    current_player = "O"
+  elif current_player == "O":
+    current_player = "X"
   return
 
 play_game()
+play_again()
+
