@@ -32,7 +32,7 @@ def play_game():
 
 def play_again():
   global winner
-  if winner:
+  while winner:
     check_answer = input("Would you like to play again? ")
     if check_answer == "yes" or check_answer == "Yes" or check_answer == "y":
       reset_board()
@@ -43,6 +43,8 @@ def play_again():
 def reset_board():
   global board
   global winner
+  global game_is_still_going
+  game_is_still_going = False
   winner = None
   board = ['-','-','-','-','-','-','-','-','-']
 
