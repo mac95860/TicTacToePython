@@ -30,22 +30,6 @@ def play_game():
   elif winner == "None":
     print("tie")
 
-def play_again():
-  global winner
-  if winner:
-    check_answer = input("Would you like to play again? ")
-    if check_answer == "yes" or check_answer == "Yes" or check_answer == "y":
-      play_game()
-    else:
-      print("Until Next Time Then!")
-
-def reset_board():
-  global board
-  global winner
-  global game_is_still_going
-  winner = None
-  board = ['-','-','-','-','-','-','-','-','-']
-
 # handle turn of arbitary player
 def handle_turn(player):
   print(player + "'s turn.'")
@@ -153,5 +137,16 @@ def flip_player():
   return
 
 play_game()
-play_again()
+
+while game_is_still_going is False:
+  check_answer = input("Would you like to play again? Enter Y/N: ")
+  if check_answer == "Y":
+    board = ['-','-','-','-','-','-','-','-','-']
+    game_is_still_going = True
+    winner = None
+    play_game()
+  else:
+    print("See you next time then!")
+    break
+    
 
